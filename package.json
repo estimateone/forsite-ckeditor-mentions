@@ -1,5 +1,5 @@
 {
-  "name": "@ckeditor/ckeditor5-mention",
+  "name": "forsite-ckeditor-mentions",
   "version": "29.2.0",
   "description": "Mention feature for CKEditor 5.",
   "keywords": [
