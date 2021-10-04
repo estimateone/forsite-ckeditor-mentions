@@ -3,7 +3,14 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-.mention {
-    background: rgba(153, 0, 48, 0.1);
-    color: #990030;
+.unpopulated {
+    color: black;
+    background: var(--west-200);
+    text-decoration: underline var(--west-400);
+}
+
+.populated {
+    color: black;
+    background: var(--iron-100);
+    text-decoration: underline var(--iron-300);
 }

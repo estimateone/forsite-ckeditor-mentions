@@ -37,6 +37,9 @@ export default class MentionEditing extends Plugin {
 		const model = editor.model;
 		const doc = model.document;
 
+		const mentionFeed =  editor.config._config.mention.feeds[0].feed;
+		const mentionOptions = typeof mentionFeed === "function" ? mentionFeed() : mentionFeed;
+
 		// Allow the mention attribute on all text nodes.
 		model.schema.extend( '$text', { allowAttributes: 'mention' } );
 
@@ -45,18 +48,26 @@ export default class MentionEditing extends Plugin {
 			view: {
 				name: 'span',
 				key: 'data-mention',
-				classes: 'mention'
+				classes: 'mention',
 			},
 			model: {
 				key: 'mention',
-				value: viewElement => _toMentionAttribute( viewElement )
+				value: (viewItem) => {
+					// The mention feature expects that the mention attribute value
+					// in the model is a plain object with a set of additional attributes.
+					// In order to create a proper object, use the toMentionAttribute helper method:
+					return editor.plugins.get( 'Mention' ).toMentionAttribute( viewItem, {
+						// data-is-populated is used by CKEditor when up/down casting between model and view
+						isPopulated: viewItem.getAttribute('data-is-populated')
+					} );
+				}
 			}
 		} );
 
 		// Downcast conversion.
 		editor.conversion.for( 'downcast' ).attributeToElement( {
 			model: 'mention',
-			view: createViewMentionElement
+			view: createViewMentionElement(mentionOptions)
 		} );
 		editor.conversion.for( 'downcast' ).add( preventPartialMentionDowncast );
 
@@ -131,14 +142,22 @@ function preventPartialMentionDowncast( dispatcher ) {
 // @param {Object} mention
 // @param {module:engine/conversion/downcastdispatcher~DowncastConversionApi} conversionApi
 // @returns {module:engine/view/attributeelement~AttributeElement}
-function createViewMentionElement( mention, { writer } ) {
+const createViewMentionElement = (feed) => ( mention, { writer } ) => {
 	if ( !mention ) {
 		return;
 	}
 
+	const feedItem = feed.find(({ id }) => id === mention._text);
+	const isPopulatedIsUndefined = mention.isPopulated === "undefined" || mention.isPopulated === undefined;
+	const mentionIsPopulated = mention.isPopulated === "true" || mention.isPopulated === true;
+	const isPopulated = (!isPopulatedIsUndefined && mentionIsPopulated) || feedItem.isPopulated;
+
+	const statusClass = isPopulated ? 'populated' : 'unpopulated';
+
 	const attributes = {
-		class: 'mention',
-		'data-mention': mention.id
+		class: `${statusClass} mention`,
+		'data-mention': mention.id,
+		'data-is-populated': mention.isPopulated,
 	};
 
 	const options = {
