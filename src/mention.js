@@ -13,6 +13,7 @@ import MentionEditing, { _toMentionAttribute } from './mentionediting';
 import MentionUI from './mentionui';
 
 import '../theme/mention.css';
+import '../theme/variables.css';
 
 /**
  * The mention plugin.
