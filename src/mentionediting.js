@@ -144,6 +144,8 @@ function preventPartialMentionDowncast( dispatcher ) {
 // @param {module:engine/conversion/downcastdispatcher~DowncastConversionApi} conversionApi
 // @returns {module:engine/view/attributeelement~AttributeElement}
 const createViewMentionElement = (feed) => ( mention, { writer } ) => {
+	console.log(mention);
+	console.log('feed', feed);
 	if ( !mention ) {
 		return;
 	}
