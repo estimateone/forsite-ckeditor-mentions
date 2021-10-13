@@ -48,7 +48,7 @@ export default class MentionEditing extends Plugin {
 			view: {
 				name: 'span',
 				key: 'data-mention',
-				classes: 'mention',
+				// classes: 'mention',
 			},
 			model: {
 				key: 'mention',
