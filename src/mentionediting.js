@@ -53,6 +53,7 @@ export default class MentionEditing extends Plugin {
 			model: {
 				key: 'mention',
 				value: (viewItem) => {
+					console.log(viewItem);
 					// The mention feature expects that the mention attribute value
 					// in the model is a plain object with a set of additional attributes.
 					// In order to create a proper object, use the toMentionAttribute helper method:
