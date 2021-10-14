@@ -150,7 +150,7 @@ const createViewMentionElement = (feed) => ( mention, { writer } ) => {
 	const feedItem = feed.find(({ id }) => id === mention._text);
 	const isPopulatedIsUndefined = mention.isPopulated === "undefined" || mention.isPopulated === undefined;
 	const mentionIsPopulated = mention.isPopulated === "true" || mention.isPopulated === true;
-	const isPopulated = (!isPopulatedIsUndefined && mentionIsPopulated) || feedItem.isPopulated;
+	const isPopulated = (!isPopulatedIsUndefined && mentionIsPopulated) || (feedItem && feedItem.isPopulated);
 
 	const statusClass = isPopulated ? 'populated' : 'unpopulated';
 
